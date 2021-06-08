@@ -1,0 +1,38 @@
+:root {
+    --h1_color: #000;
+    --h4-color: #272829;
+}
+
+html, body {
+    font-family: 'Open Sans';
+    background-color: #fff4f3;
+    text-align: justify;
+}
+
+h1, h2 {
+    padding-top: 1vmax;
+    color: var(--h1_color);
+    line-height: 1.5;
+}
+
+h3, h4, h5, h6 {
+    color: var(--h4-color);
+}
+
+.col-12 button {
+    display: block;
+    margin: auto;
+}
+
+.flashMessage {
+    margin-top: 2vmax;
+    color: #fff;
+    background-color: #24a0ed;
+    width: fit-content;
+    position: absolute;
+    left: 40%;
+}
+
+.hcenter {
+    text-align: center;
+}

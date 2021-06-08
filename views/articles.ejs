@@ -1,0 +1,8 @@
+<%- include("partials/header") %> 
+<div class="container">
+    <% foundArticles.forEach(function(element) { %> 
+        <h2><%= element.title %></h2>
+        <h5><%= element.content %></h5>
+    <% }) %> 
+</div>
+<%- include("partials/footer") %> 
