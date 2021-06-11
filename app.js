@@ -25,32 +25,96 @@ let successfulMessage = "";
 app.get("/", function(req, res) {
     Article.find({}, function(err, results) {
         if(err) {
-            console.log(err.message);
+            res.send(err);
         } else {
             res.render('home', {foundArticles: results})
         }
     })
 });
 
+// Requests targetting all the articles...
 
-app.get("/articles", function(req, res) {
+app.route("/articles")
+
+.get(function(req, res) {
     res.render('articles', {sucessMessage: successfulMessage});
 })
-
-app.post("/articles", function(req, res) {
+    
+.post(function(req, res) {
     const newArticle = new Article ({
         title: req.body.userTitle,
         content: req.body.userContent
     });
     newArticle.save(function(err) {
         if(err) {
-            throw err;
+            res.send(err);
         } else {
             successfulMessage = "Successfully inserted into the database!";
             res.render('articles', {sucessMessage: successfulMessage});
         }
     });
+})
+    
+.delete(function(req, res) {
+    Article.deleteMany({}, function(err) {
+        if(err) {
+            res.send(err);
+        } else {
+            res.send("Successfully deleted all the articles!");
+        }
+    });
 });
+
+// Requests targetting a single article...
+
+app.route("/articles/:articleTitle")
+
+.get(function(req, res) {
+    const userTitle = req.params.articleTitle;
+    Article.findOne({title: userTitle}, function(err, foundArticle) {
+        if(err) {
+            res.send(err);
+        } else {
+            if(foundArticle) {
+                res.send(foundArticle);
+            } else {
+                res.send("No article matching that title was found! :-)")
+            }
+        }
+    });
+})
+
+.put(function(req, res) {
+    const userTitle = req.params.articleTitle;
+    Article.replaceOne({title: userTitle}, {title: req.body.newTitle, content: req.body.newContent}, {overwrite: true}, function(err, results) {
+        if(err) {
+            res.send(err);
+        } else {
+            res.send(results);
+        }
+    });
+})
+
+.patch(function(req, res) {
+    const userTitle = req.params.articleTitle;
+    Article.updateOne({title: userTitle}, {$set: req.body}, function(err, results) {
+        if(err) {
+            res.send(err);
+        } else {
+            res.send(results);
+        }
+    });
+})
+
+.delete(function(req, res) {
+    Article.deleteOne({title: req.params.articleTitle}, {upsert: true}, function(err, results) {
+        if(err) {
+            res.send(err);
+        } else {
+            res.send(results);
+        }
+    });
+})
 
 app.listen(process.env.PORT || 3000, () => {
     console.log("Server is started at port 3000.");
