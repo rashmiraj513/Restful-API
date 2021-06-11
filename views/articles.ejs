@@ -1,8 +1,21 @@
 <%- include("partials/header") %> 
+
 <div class="container">
-    <% foundArticles.forEach(function(element) { %> 
-        <h2><%= element.title %></h2>
-        <h5><%= element.content %></h5>
-    <% }) %> 
+    <h1 class="hcenter">Compose a new Article</h1>
+    <form action="/articles" method="post">
+        <div class="col-12">
+            <div class="form-group">
+                <label for="textTitle"></label>
+                <input type="text" class="form-control w-100" name="userTitle" id="textTitle" placeholder="Enter Title" spellcheck="correct" required autocomplete="off"></input>
+            </div>
+            <div class="form-group">
+                <label for="textContent"></label>
+                <textarea class="form-control w-100" name="userContent" id="textContent" placeholder="Enter Content" rows="5" spellcheck="correct" required autocomplete="off"></textarea>
+            </div>
+            <button type="submit" class="btn btn-lg btn-outline-primary center">Submit</button>
+        </div>
+    </form>
+    <h5 class="flashMessage"><%= sucessMessage %> </h5>
 </div>
+
 <%- include("partials/footer") %> 

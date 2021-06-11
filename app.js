@@ -23,10 +23,21 @@ const Article = mongoose.model("Article", articleSchema);
 let successfulMessage = "";
 
 app.get("/", function(req, res) {
-    res.render('home', {sucessMessage: successfulMessage});
+    Article.find({}, function(err, results) {
+        if(err) {
+            console.log(err.message);
+        } else {
+            res.render('home', {foundArticles: results})
+        }
+    })
+});
+
+
+app.get("/articles", function(req, res) {
+    res.render('articles', {sucessMessage: successfulMessage});
 })
 
-app.post("/", function(req, res) {
+app.post("/articles", function(req, res) {
     const newArticle = new Article ({
         title: req.body.userTitle,
         content: req.body.userContent
@@ -36,20 +47,9 @@ app.post("/", function(req, res) {
             throw err;
         } else {
             successfulMessage = "Successfully inserted into the database!";
-            res.render('home', {sucessMessage: successfulMessage});
-            successfulMessage = "";
+            res.render('articles', {sucessMessage: successfulMessage});
         }
     });
-});
-
-app.get("/articles", function(req, res) {
-    Article.find({}, function(err, results) {
-        if(err) {
-            console.log(err.message);
-        } else {
-            res.render('articles', {foundArticles: results})
-        }
-    })
 });
 
 app.listen(process.env.PORT || 3000, () => {
